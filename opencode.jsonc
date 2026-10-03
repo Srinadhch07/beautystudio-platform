@@ -1,0 +1,243 @@
+{
+  // Project-scoped opencode configuration for beautyparlour.
+  //
+  // Purpose: let routine development run without a prompt for every command,
+  // while keeping confirmation (or refusal) in front of anything irreversible.
+  //
+  // Two rules govern how this file is written:
+  //
+  //   1. LAST MATCHING RULE WINS. Every object below puts a broad rule first
+  //      and the narrow, dangerous ones last, so the specific rule overrides
+  //      the general one. Reordering a block changes behaviour.
+  //
+  //   2. NEVER WEAKEN AN EXISTING DEFAULT. opencode already defaults most
+  //      permissions to "allow", but it ships with `read` denying `*.env`,
+  //      `*.env.*`. Those denials are re-stated verbatim below so that granting
+  //      read access can never quietly re-open .env. `external_directory` and
+  //      `doom_loop` are deliberately left unset so they keep defaulting to
+  //      "ask"; overriding them here would be a security downgrade.
+  //
+  // `bash` is the only place where real restriction is added, and every gate
+  // below is an *addition* to the permissive default, never a removal.
+  //
+  // Secrets policy: nothing in this project should ever print, log, copy or
+  // echo .env contents, JWT secrets, SMTP passwords, AWS keys or Mongo URIs.
+  // The rules at the bottom of `bash` refuse those outright.
+  "$schema": "https://opencode.ai/config.json",
+
+  "permission": {
+    // -- Reading, searching, listing --------------------------------------
+    // "allow" is already the default; spelled out so the grant is reviewable.
+    "list": "allow",
+    "glob": "allow",
+    "grep": "allow",
+
+    // Re-states the built-in .env protection. Without these explicit deny
+    // entries, a future "read": "allow" would let the agent read live secrets.
+    "read": {
+      "*": "allow",
+      "*.env": "deny",
+      "*.env.*": "deny",
+      "*.env.example": "allow",
+      "*.env.development.example": "allow",
+      "*.pem": "deny",
+      "*.key": "deny",
+      "id_rsa*": "deny"
+    },
+
+    // -- Editing -----------------------------------------------------------
+    // Creating and editing files is unrestricted, except that touching a real
+    // .env prompts first: overwriting one can silently break a working
+    // deployment. The `*.example` files stay writable so documentation and
+    // example configuration can still be updated automatically.
+    "edit": {
+      "*": "allow",
+      "*.env": "ask",
+      "*.env.*": "ask",
+      "*.env.example": "allow",
+      "*.env.development.example": "allow"
+    },
+
+    // -- Delegation, tooling ----------------------------------------------
+    "task": "allow",
+    "lsp": "allow",
+    "skill": "allow",
+    "question": "allow",
+    "todowrite": "allow",
+    "webfetch": "allow",
+    "websearch": "allow",
+
+    // -- Shell -------------------------------------------------------------
+    "bash": {
+      // Broad default. Matches opencode's own default, so this block only ever
+      // subtracts; it never grants something that was previously gated.
+      "*": "allow",
+
+      // ---- Routine development, stated explicitly for reviewability ------
+      "git status*": "allow",
+      "git diff*": "allow",
+      "git log*": "allow",
+      "git show*": "allow",
+      "git blame*": "allow",
+      "git describe*": "allow",
+      "git rev-parse*": "allow",
+      "git ls-files*": "allow",
+      "git add*": "allow",
+      "git commit*": "allow",
+      "git branch*": "allow",
+      "git switch*": "allow",
+      "git checkout*": "allow",
+      "git stash*": "allow",
+      "git pull*": "allow",
+      "git fetch*": "allow",
+      "git merge*": "allow",
+      "git rebase*": "allow",
+      "git init*": "allow",
+      "python*": "allow",
+      "pytest*": "allow",
+      "ruff*": "allow",
+      "mypy*": "allow",
+      "uvicorn*": "allow",
+      "pip install*": "allow",
+      "npm*": "allow",
+      "npx*": "allow",
+      "node*": "allow",
+      "tsc*": "allow",
+      "vite*": "allow",
+      "pnpm*": "allow",
+      "yarn*": "allow",
+      "mkdir*": "allow",
+      "New-Item*": "allow",
+
+      // ---- System-wide software installs: prompt -------------------------
+      "npm install -g*": "ask",
+      "npm i -g*": "ask",
+      "npm uninstall -g*": "ask",
+      "npm publish*": "ask",
+      "pnpm add -g*": "ask",
+      "yarn global*": "ask",
+      "pipx install*": "ask",
+      "cargo install*": "ask",
+      "gem install*": "ask",
+      "go install*": "ask",
+      "dotnet tool install*": "ask",
+      "choco install*": "ask",
+      "choco upgrade*": "ask",
+      "winget install*": "ask",
+      "scoop install*": "ask",
+      "brew install*": "ask",
+      "apt install*": "ask",
+      "apt-get install*": "ask",
+      "dnf install*": "ask",
+      "yum install*": "ask",
+      "pacman -S*": "ask",
+
+      // ---- System-level configuration: prompt ----------------------------
+      "Set-ExecutionPolicy*": "ask",
+      "reg add*": "ask",
+      "reg delete*": "ask",
+      "netsh*": "ask",
+      "Set-Service*": "ask",
+      "New-Service*": "ask",
+      "Remove-Service*": "ask",
+      "sc.exe*": "ask",
+      "Set-ItemProperty*HKLM*": "ask",
+      "Set-ItemProperty*HKCU*": "ask",
+      "*SetEnvironmentVariable*Machine*": "ask",
+      "wsl --install*": "ask",
+
+      // ---- Irreversible / destructive git: prompt ------------------------
+      "git push*": "ask",
+      "git push*--force*": "ask",
+      "git reset --hard*": "ask",
+      "git clean*": "ask",
+      "git restore*": "ask",
+      "git checkout -- *": "ask",
+      "git checkout .*": "ask",
+      "git filter-branch*": "ask",
+      "git reflog expire*": "ask",
+      "git gc --prune*": "ask",
+
+      // ---- Bulk or recursive deletion, incl. the project itself: prompt ---
+      "rm -rf*": "ask",
+      "rm -fr*": "ask",
+      "rmdir*": "ask",
+      "rd /s*": "ask",
+      "del /s*": "ask",
+      "Remove-Item*-Recurse*": "ask",
+      "Remove-Item*-Recurse*-Force*": "ask",
+
+      // ---- AWS S3 data loss: prompt, and deny for bucket removal ---------
+      "aws s3 rm*": "ask",
+      "aws s3 sync*--delete*": "ask",
+      "aws s3api delete-object*": "ask",
+      "aws s3api delete-objects*": "ask",
+      "aws s3 rb*": "deny",
+      "aws s3 rb --force*": "deny",
+      "aws s3api delete-bucket*": "deny",
+      "aws s3api delete-bucket*--force*": "deny",
+
+      // ---- Destructive database operations: prompt ------------------------
+      "*dropDatabase*": "ask",
+      "*drop_database*": "ask",
+      "*dropCollection*": "ask",
+      "*drop_collection*": "ask",
+      "*.drop(*": "ask",
+
+      // ---- Mutating a real .env: prompt ----------------------------------
+      "Remove-Item*.env*": "ask",
+      "Move-Item*.env*": "ask",
+      "Rename-Item*.env*": "ask",
+      "Copy-Item*.env*": "ask",
+      "Set-Content*.env*": "ask",
+      "Out-File*.env*": "ask",
+      "Add-Content*.env*": "ask",
+      "rm*.env*": "ask",
+      "del*.env*": "ask",
+      "erase*.env*": "ask",
+      "mv*.env*": "ask",
+      "cp*.env*": "ask",
+
+      // ---- Refusing to print secrets: deny -------------------------------
+      // Last, and strictest. These refuse rather than prompt: the correct
+      // response to "print the JWT secret" is never to do it, and offering a
+      // one-click approval would defeat the point.
+      "Get-Content*.env*": "deny",
+      "Get-Content*JWT_SECRET*": "deny",
+      "Get-Content*SMTP_PASSWORD*": "deny",
+      "Get-Content*AWS_SECRET*": "deny",
+      "Get-Content*MONGO_URI*": "deny",
+      "Get-Content*.pem*": "deny",
+      "Get-Content*id_rsa*": "deny",
+      "type*.env*": "deny",
+      "type*.pem*": "deny",
+      "cat*.env*": "deny",
+      "cat*.pem*": "deny",
+      "cat*id_rsa*": "deny",
+      "more*.env*": "deny",
+      "printenv*": "deny",
+      "direnv*": "deny",
+      "Write-Output*JWT_SECRET*": "deny",
+      "Write-Output*SMTP_PASSWORD*": "deny",
+      "Write-Output*AWS_SECRET*": "deny",
+      "Write-Output*MONGO_URI*": "deny",
+      "Write-Host*JWT_SECRET*": "deny",
+      "Write-Host*SMTP_PASSWORD*": "deny",
+      "Write-Host*AWS_SECRET*": "deny",
+      "echo*$JWT_SECRET*": "deny",
+      "echo*$SMTP_PASSWORD*": "deny",
+      "echo*$AWS_SECRET_ACCESS_KEY*": "deny",
+      "echo*$AWS_ACCESS_KEY_ID*": "deny",
+      "echo*$MONGO_URI*": "deny",
+
+      // ---- Re-allow the committed example files --------------------------
+      // Placed last so last-match-wins keeps them readable: they are templates
+      // with placeholder values, and keeping them readable is the whole point.
+      "cat*.env.example*": "allow",
+      "cat*.env.development.example*": "allow",
+      "Get-Content*.env.example*": "allow",
+      "Get-Content*.env.development.example*": "allow",
+      "type*.env.example*": "allow"
+    }
+  }
+}

@@ -1,0 +1,18 @@
+# ---------------------------------------------------------------------------
+# Backend development / tooling dependencies.
+# Install with:  pip install -r requirements-dev.txt
+# ---------------------------------------------------------------------------
+
+# Test runner + in-process ASGI client
+# httpx2 is the transport required by the current Starlette TestClient.
+pytest>=8.0
+httpx2>=2.13
+
+# Lint + format
+ruff>=0.6
+
+# In-memory MongoDB server used by the test-suite. Keeps tests offline so the
+# real (Atlas) database configured in .env is never read or modified.
+# It ships an async client wrapper, so the suite exercises the same await-style
+# repository code as production.
+mongomock-motor>=0.0.36

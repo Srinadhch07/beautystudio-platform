@@ -1,0 +1,21 @@
+# Normalise line endings so diffs stay stable across Windows/macOS/Linux.
+* text=auto eol=lf
+
+# Windows scripts must stay CRLF
+*.cmd  text eol=crlf
+*.ps1  text eol=crlf
+
+# Binary assets
+*.png   binary
+*.jpg   binary
+*.jpeg  binary
+*.gif   binary
+*.webp  binary
+*.ico   binary
+*.pdf   binary
+*.zip   binary
+*.gz    binary
+
+# Lockfiles / generated
+package-lock.json  text eol=lf
+pnpm-lock.yaml      text eol=lf

@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!--
+      Static defaults only. The real business name, description and social image
+      come from GET /api/v1/public/config and are applied at runtime by
+      SiteProvider, so this markup only covers the very first paint and crawlers
+      that do not execute JavaScript.
+    -->
+    <title>Beauty Parlour</title>
+    <meta name="description" content="Beauty parlour services, gallery, offers and booking." />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Beauty Parlour" />
+    <meta property="og:description" content="Beauty parlour services, gallery, offers and booking." />
+    <meta name="twitter:card" content="summary_large_image" />
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

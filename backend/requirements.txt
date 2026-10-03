@@ -1,0 +1,34 @@
+# ---------------------------------------------------------------------------
+# Beauty Parlour - backend runtime dependencies (direct dependencies only).
+# Transitive dependencies are resolved by pip and are NOT pinned here.
+# Python 3.11+
+# ---------------------------------------------------------------------------
+
+# Web framework + ASGI server
+fastapi>=0.115
+uvicorn[standard]>=0.30
+
+# Settings / validation
+pydantic>=2.7
+pydantic-settings>=2.3
+# Backs pydantic.EmailStr
+email-validator>=2.2
+
+# Database driver (async MongoDB client, no legacy motor dependency)
+pymongo>=4.9
+
+# Authentication
+# argon2-cffi: Argon2id password hashing (PHC winner, memory-hard). Used
+# directly rather than through passlib, which is unmaintained.
+argon2-cffi>=23.1
+# PyJWT: signed access tokens. HMAC-SHA256 only - no algorithm is ever
+# taken from the token itself, which would allow "alg: none" style attacks.
+pyjwt>=2.9
+
+# AWS S3 client
+boto3>=1.34
+
+# Multipart form parsing, required by FastAPI for UploadFile/File/Form
+# (multipart/form-data image uploads). Not optional once a route declares
+# an UploadFile parameter.
+python-multipart>=0.0.9

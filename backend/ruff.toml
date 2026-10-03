@@ -1,0 +1,25 @@
+target-version = "py311"
+line-length = 100
+src = ["."]
+
+[lint]
+select = [
+    "E",    # pycodestyle errors
+    "W",    # pycodestyle warnings
+    "F",    # pyflakes
+    "I",    # isort
+    "B",    # flake8-bugbear
+    "UP",   # pyupgrade
+    "C4",   # flake8-comprehensions
+    "SIM",  # flake8-simplify
+]
+ignore = [
+    "B008",  # FastAPI dependency injection relies on calls in defaults
+]
+
+[lint.per-file-ignores]
+"tests/*" = ["E501"]
+
+[format]
+quote-style = "double"
+indent-style = "space"
