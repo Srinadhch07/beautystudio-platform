@@ -1,4 +1,4 @@
-# Beauty Parlour
+# Beauty Studio
 
 Full-stack website for a beauty parlour.
 

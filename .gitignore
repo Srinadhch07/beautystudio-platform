@@ -64,7 +64,6 @@ backend/static/
 # Local media fallback (used only when STORAGE_MODE=local in development)
 # ---------------------------------------------------------------------------
 uploads/
-storage/
 media/
 staticfiles/
 
