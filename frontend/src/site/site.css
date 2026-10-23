@@ -726,7 +726,7 @@
   border-radius: 0 !important;
 }
 
-.badge {
+.offer-card__media .badge {
   position: absolute;
   top: 0.9rem;
   left: 0.9rem;
@@ -740,17 +740,17 @@
   box-shadow: var(--shadow-md);
 }
 
-.badge--live {
+.offer-card__media .badge--live {
   background: var(--color-accent);
   color: var(--color-action-text);
 }
 
-.badge--soon {
+.offer-card__media .badge--soon {
   background: var(--color-surface);
   color: var(--color-accent);
 }
 
-.badge--over {
+.offer-card__media .badge--over {
   background: var(--color-border);
   color: var(--color-text-muted);
 }
@@ -1366,12 +1366,16 @@
 }
 
 .spinner {
+  display: inline-block;
+  box-sizing: border-box;
+  flex: none;
   width: 1.75rem;
   height: 1.75rem;
-  border: 2px solid var(--color-border);
+  border: 2px solid color-mix(in srgb, var(--color-accent) 20%, transparent);
   border-top-color: var(--color-accent);
-  border-radius: 50%;
-  animation: spin 0.7s linear infinite;
+  border-right-color: var(--color-accent);
+  border-radius: 50% !important;
+  animation: spin 0.8s linear infinite;
 }
 
 /* --------------------------------------------------------------- filters */

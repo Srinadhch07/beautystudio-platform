@@ -205,7 +205,7 @@ function SettingsForm({
   }
 
   return (
-    <form onSubmit={onSubmit}>
+    <form className="settings-form" onSubmit={onSubmit}>
       <PageHeader
         title="Site settings"
         description="Business identity, contact details, opening hours and presentation."

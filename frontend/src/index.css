@@ -393,6 +393,22 @@ textarea:disabled {
   accent-color: var(--color-primary);
 }
 
+/* Site Settings inputs: opt the form's controls back into a soft shape and a
+   light neutral border, since the global radius reset squares everything off.
+   The exclusion list leaves colour swatches and checkbox-style controls alone. */
+.settings-form input:not([type='color']):not([type='checkbox']):not([type='radio']):not([type='file']):not([type='range']),
+.settings-form select,
+.settings-form textarea {
+  width: 100%;
+  padding: 9px 11px;
+  border: 1px solid #d6d3d1;
+  border-radius: 6px !important;
+  background: var(--color-surface);
+  color: var(--color-text);
+  font: inherit;
+  font-size: 0.9rem;
+}
+
 /* --- Buttons --------------------------------------------------------------- */
 
 .btn {
@@ -497,9 +513,12 @@ tbody tr:last-child td {
 }
 
 td.actions {
-  display: flex;
-  gap: 4px;
-  justify-content: flex-end;
+  text-align: right;
+  white-space: nowrap;
+}
+
+td.actions .btn + .btn {
+  margin-left: 4px;
 }
 
 .cell-title {
@@ -572,12 +591,16 @@ td.actions {
 }
 
 .spinner {
+  display: inline-block;
+  box-sizing: border-box;
+  flex: none;
   width: 22px;
   height: 22px;
-  border: 2px solid var(--color-border-strong);
-  border-top-color: var(--color-primary);
-  border-radius: 50%;
-  animation: spin 0.7s linear infinite;
+  border: 2px solid color-mix(in srgb, var(--color-accent) 20%, transparent);
+  border-top-color: var(--color-accent);
+  border-right-color: var(--color-accent);
+  border-radius: 50% !important;
+  animation: spin 0.8s linear infinite;
 }
 
 .spinner--small {

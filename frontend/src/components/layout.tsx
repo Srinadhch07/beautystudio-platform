@@ -68,7 +68,7 @@ export function Layout({
 
       <aside className={menuOpen ? 'sidebar sidebar--open' : 'sidebar'}>
         <div className="sidebar__brand">
-          <div className="sidebar__mark">BP</div>
+          <div className="sidebar__mark">MM</div>
           <div>
             <strong>{admin?.name ?? 'Admin'}</strong>
             <span>Admin panel</span>

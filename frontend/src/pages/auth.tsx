@@ -21,7 +21,7 @@ export function LoginPage({ onForgot }: { onForgot: () => void }) {
     <div className="auth">
       <div className="auth__card">
         <div className="auth__head">
-          <div className="auth__mark">BP</div>
+          <div className="auth__mark">MM</div>
           <h1>Admin sign in</h1>
           <p className="muted">Manage your parlour content.</p>
         </div>
