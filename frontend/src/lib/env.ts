@@ -23,7 +23,7 @@ function normaliseBaseUrl(value: string): string {
 const apiBaseUrl = normaliseBaseUrl(raw.VITE_API_BASE_URL ?? '/api/v1')
 
 export const env = {
-  appName: raw.VITE_APP_NAME?.trim() || 'Beauty Parlour',
+  appName: raw.VITE_APP_NAME?.trim() || 'Manu Makeovers',
   apiBaseUrl,
   apiRoot: apiBaseUrl.replace(/\/v1$/, ''),
   isDevelopment: raw.DEV,

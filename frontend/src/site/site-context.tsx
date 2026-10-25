@@ -15,6 +15,11 @@ import { publicApi } from './api'
 import { useAsync } from '@/lib/hooks'
 import type { PublicConfig } from './types'
 
+/** Brand metadata that must stay identical to the static tags in `index.html`. */
+const SITE_TITLE = 'Manu Makeovers | Professional Beauty & Makeup Services'
+const SITE_DESCRIPTION =
+  'Discover Manu Makeovers for professional beauty treatments, makeup, hairstyling, skincare, and personalized beauty services. Your beauty, our passion.'
+
 /**
  * Maps backend theme tokens onto the custom properties the stylesheet uses.
  * Anything the backend does not define is skipped, so adding a token to a
@@ -113,11 +118,9 @@ export function SiteProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     if (config.data === null) return
     const identity = config.data.identity
-    document.title = identity.business_name
-    if (identity.description) {
-      const meta = document.querySelector('meta[name="description"]')
-      if (meta !== null) meta.setAttribute('content', identity.description.slice(0, 300))
-    }
+    document.title = SITE_TITLE
+    const meta = document.querySelector('meta[name="description"]')
+    if (meta !== null) meta.setAttribute('content', SITE_DESCRIPTION)
     if (identity.favicon) {
       let icon = document.querySelector<HTMLLinkElement>('link[rel="icon"]')
       if (icon === null) {
